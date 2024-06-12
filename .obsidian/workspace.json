@@ -1,22 +1,18 @@
 {
   "main": {
-    "id": "130bb09995d07d92",
+    "id": "4d65d7ab31aae1af",
     "type": "split",
     "children": [
       {
-        "id": "f5e152718d04b106",
+        "id": "386eb58bfed5bf8d",
         "type": "tabs",
         "children": [
           {
-            "id": "3edcc2a36604f31e",
+            "id": "1639d299c8cc6a88",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "0. Slip-box/피드백이 늦거나 어려울 수록 학습하기 어렵다.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -25,15 +21,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "bb8c7c4c3039acf1",
+    "id": "c873407065c79418",
     "type": "split",
     "children": [
       {
-        "id": "df0730da8a9bbb1e",
+        "id": "bfbdb69bf2558e75",
         "type": "tabs",
         "children": [
           {
-            "id": "0382515fb7484a72",
+            "id": "a13fd9f0cf79db51",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -43,7 +39,7 @@
             }
           },
           {
-            "id": "bb03e532e2b74738",
+            "id": "a3c475e6690f61ff",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -58,7 +54,7 @@
             }
           },
           {
-            "id": "b18d1a340e066433",
+            "id": "ca34b71efc631724",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -72,15 +68,15 @@
     "width": 300
   },
   "right": {
-    "id": "c11665841fb72a61",
+    "id": "cd2dc509e5be1133",
     "type": "split",
     "children": [
       {
-        "id": "02aa8e323d959a52",
+        "id": "48f333409d3ca0ab",
         "type": "tabs",
         "children": [
           {
-            "id": "e4f36082ec1d84fe",
+            "id": "4e76e6dea44daf14",
             "type": "leaf",
             "state": {
               "type": "calendar",
@@ -88,12 +84,11 @@
             }
           },
           {
-            "id": "0f1da847290e15e9",
+            "id": "ada510eaa5ba143f",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "0. Slip-box/피드백이 늦거나 어려울 수록 학습하기 어렵다.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,19 +100,18 @@
             }
           },
           {
-            "id": "319e6e1c964b24dd",
+            "id": "9733e502ba32fe67",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "0. Slip-box/피드백이 늦거나 어려울 수록 학습하기 어렵다.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
             }
           },
           {
-            "id": "0e5a3c9e84a77523",
+            "id": "c5943a3ede638222",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -128,7 +122,7 @@
             }
           },
           {
-            "id": "8f7971ce25ee07ee",
+            "id": "e153e4f63e1c8554",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -140,13 +134,11 @@
             }
           },
           {
-            "id": "0a3c49d501bb9a0e",
+            "id": "c35c59402fea2d0d",
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {
-                "file": "0. Slip-box/피드백이 늦거나 어려울 수록 학습하기 어렵다.md"
-              }
+              "state": {}
             }
           }
         ]
@@ -159,8 +151,8 @@
   "left-ribbon": {
     "hiddenItems": {
       "kr-book-info-plugin:Add Book Info": false,
-      "obsidian-excalidraw-plugin:Create new drawing": false,
       "templater-obsidian:Templater": false,
+      "obsidian-excalidraw-plugin:Create new drawing": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -172,16 +164,6 @@
       "periodic-notes:Open today": false
     }
   },
-  "active": "0382515fb7484a72",
-  "lastOpenFiles": [
-    "0. Slip-box/좋은 테스트는 실제 상황이랑 근접한 테스트다.md",
-    "0. Slip-box/애쓸 수록 안되는 것들이 있다.md",
-    "0. Slip-box/실행 횟수가 중요하다.md",
-    "0. Slip-box/몰입을 위해선 적절한 난이도가 주어져야 한다.md",
-    "0. Slip-box/Meta Skill.md",
-    "0. Slip-box/JIT 학습법.md",
-    "0. Slip-box/피드백이 늦거나 어려울 수록 학습하기 어렵다.md",
-    "3. Resource/references/시대예보 핵개인의 시대.md",
-    "3. Resource/references/한 번만 읽어도 책 내용 다 기억하는 기적의 독서 메모법.md"
-  ]
+  "active": "1639d299c8cc6a88",
+  "lastOpenFiles": []
 }
