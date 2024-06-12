@@ -1,0 +1,34 @@
+{
+  "showGettingStartedBanner": true,
+  "hasMigratedDailyNoteSettings": false,
+  "hasMigratedWeeklyNoteSettings": false,
+  "daily": {
+    "format": "",
+    "template": "",
+    "folder": "3. Resource/periodic notes/daily",
+    "enabled": true
+  },
+  "weekly": {
+    "format": "",
+    "template": "3. Resource/templates/주간 노트 템플릿.md",
+    "folder": "3. Resource/periodic notes/weekly",
+    "enabled": true
+  },
+  "monthly": {
+    "format": "",
+    "template": "",
+    "folder": "3. Resource/periodic notes/monthly",
+    "enabled": true
+  },
+  "quarterly": {
+    "format": "",
+    "template": "",
+    "folder": ""
+  },
+  "yearly": {
+    "format": "",
+    "template": "",
+    "folder": "3. Resource/periodic notes/yearly",
+    "enabled": true
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "collapse-filter": false,
+  "search": "path: \"0. Slip-box\" ",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": true,
+  "showOrphans": true,
+  "collapse-color-groups": true,
+  "colorGroups": [],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1,
+  "collapse-forces": true,
+  "centerStrength": 0.7799072265625,
+  "repelStrength": 17.7140299479167,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 0.7319019640320058,
+  "close": true
+}

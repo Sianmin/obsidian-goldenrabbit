@@ -1,0 +1,3 @@
+- 이 볼트는 Calendar와 Periodic Notes 플러그인이 이미 설치되어 있습니다.
+- 다이어리 노트들은 `3. Resource/periodic notes`에 생성되도록 지정되어 있습니다.
+- 기본적으로 `Alt+1` `Alt+2` `Alt+3` `Alt+4`로 일간, 주간, 월간, 연간 노트로 이동합니다.

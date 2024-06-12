@@ -1,0 +1,11 @@
+{
+  "infobox@@infobox-enabled": true,
+  "infobox@@infobox-width": 256,
+  "infobox@@infobox-hide-thead": true,
+  "things-style@@mobile-black-background": false,
+  "things-style@@active-line": true,
+  "things-style@@fancy-code": true,
+  "things-style@@fancy-highlight": true,
+  "things-style@@code-normal": "#0078FF",
+  "things-style@@code-color-d": "#0078FF"
+}
