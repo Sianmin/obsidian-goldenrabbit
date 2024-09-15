@@ -21,3 +21,11 @@
 > snippets는 다음 레포지토리에서 참고했습니다.
 > 
 > https://github.com/r-u-s-h-i-k-e-s-h/Obsidian-CSS-Snippets/tree/Collection
+
+## 책이랑 내용이 바뀐점.
+### Smart connections
+- OpenAI의 결제 방식이 집필 시점이랑 조금 바뀌었지만, 큰 어려움 없이 진행하실 수 있습니다. 아직 이 부븐으로 질문이 들어온 적은 없습니다.
+- Embedding model과 Chat model의 list가 다를 겁니다. 현 시점에선 다음 model을 사용하시면 되겠습니다.
+    - embedding model: text-embedding-3-large
+    - chat model: gpt-4o
+
