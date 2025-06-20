@@ -25,7 +25,9 @@
 ## 책이랑 내용이 바뀐점
 ### Smart connections
 - OpenAI의 결제 방식이 집필 시점이랑 조금 바뀌었지만, 큰 어려움 없이 진행하실 수 있습니다. 아직 이 부븐으로 질문이 들어온 적은 없습니다.
-- Embedding model과 Chat model의 list가 다를 겁니다. 현 시점에선 다음 model을 사용하시면 되겠습니다.
-    - embedding model: text-embedding-3-large
-    - chat model: gpt-4o
+- 임베딩 모델은 Smart environment 옵션에서 Smart Source의 Embedding model에서 지정합니다. Embedding model과 Chat model의 list가 다를 겁니다. 현 시점에선 다음 model을 사용하시면 되겠습니다.
+    - embedding model: OpenAl Text-3 Large
+- 대화 모델은 설정의 Community plugin에서 Smart chat 옵션이 생겼을 겁니다. 거기서 지정합니다. (아래 스샷 참고)
 
+
+![|900](4.%20Archive/attachments/smartchat.png)

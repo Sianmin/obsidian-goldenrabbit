@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "386eb58bfed5bf8d",
+        "id": "03dfb9f4180dee7f",
         "type": "tabs",
         "children": [
           {
-            "id": "1639d299c8cc6a88",
+            "id": "56a22e7709f370d2",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "README"
             }
           }
         ]
