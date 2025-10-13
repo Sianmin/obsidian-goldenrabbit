@@ -181,9 +181,10 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
+      "obsidian-excalidraw-plugin:New drawing": false,
       "kr-book-info-plugin:Add Book Info": false,
       "templater-obsidian:Templater": false,
-      "obsidian-excalidraw-plugin:Create new drawing": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -195,6 +196,6 @@
       "periodic-notes:Open today": false
     }
   },
-  "active": "1639d299c8cc6a88",
+  "active": "56a22e7709f370d2",
   "lastOpenFiles": []
 }
