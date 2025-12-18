@@ -30,6 +30,7 @@
     "생성 시각": "datetime",
     "excalidraw-export-embed-scene": "checkbox",
     "excalidraw-embeddable-theme": "text",
-    "excalidraw-embed-md": "checkbox"
+    "excalidraw-embed-md": "checkbox",
+    "excalidraw-export-internal-links": "checkbox"
   }
 }

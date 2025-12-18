@@ -1,4 +1,6 @@
 {
+  "copyLinkToElemenetAnchorTo100": false,
+  "copyFrameLinkByName": false,
   "disableDoubleClickTextEditing": false,
   "folder": "",
   "cropFolder": "",
@@ -38,6 +40,8 @@
   "overrideObsidianFontSize": false,
   "dynamicStyling": "colorful",
   "isLeftHanded": false,
+  "desktopUIMode": "tray",
+  "tabletUIMode": "compact",
   "iframeMatchExcalidrawTheme": true,
   "matchTheme": false,
   "matchThemeAlways": false,
@@ -118,9 +122,7 @@
   "mdBorderColor": "Black",
   "mdCSS": "",
   "scriptEngineSettings": {},
-  "defaultTrayMode": true,
-  "compactModeOnTablets": true,
-  "previousRelease": "2.16.1",
+  "previousRelease": "2.18.1",
   "showReleaseNotes": true,
   "compareManifestToPluginVersion": true,
   "showNewVersionNotification": true,
@@ -483,6 +485,7 @@
   "aiEnabled": true,
   "openAIAPIToken": "",
   "openAIDefaultTextModel": "gpt-3.5-turbo-1106",
+  "openAIDefaultTextModelMaxTokens": 4096,
   "openAIDefaultVisionModel": "gpt-4o",
   "openAIDefaultImageGenerationModel": "dall-e-3",
   "openAIURL": "https://api.openai.com/v1/chat/completions",
@@ -810,5 +813,8 @@
     "alignment": "center",
     "margin": "normal"
   },
+  "disableContextMenu": false,
+  "defaultTrayMode": true,
+  "compactModeOnTablets": true,
   "autosaveInterval": 15000
 }
