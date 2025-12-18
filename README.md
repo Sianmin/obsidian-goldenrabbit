@@ -26,7 +26,7 @@
 ### Smart connections
 
 > [!CAUTION]
-> 현재 Smart connections에서는 **유료 Pro 사용자가 아니라면 embedding model로 TaylorAI/bge-micro-v2가 고정입**니다. ==따라서, Smart connections을 유료로 사용하지 않을 예정이라면 OpenAI를 통해 결제를 하고 API key를 가지고 오는 부분은 진행하지 않으셔도 됩니다.==
+> 현재 Smart connections에서는 **유료 Pro 사용자가 아니라면 embedding model로 TaylorAI/bge-micro-v2가 고정입**니다. 따라서, Smart connections을 유료로 사용하지 않을 예정이라면 OpenAI를 통해 결제를 하고 API key를 가지고 오는 부분은 진행하지 않으셔도 됩니다.
 
 - OpenAI의 결제 방식이 집필 시점이랑 조금 바뀌었지만, 큰 어려움 없이 진행하실 수 있습니다. 아직 이 부븐으로 질문이 들어온 적은 없습니다.
 - 임베딩 모델은 Smart environment 옵션에서 Smart Source의 Embedding model에서 지정합니다. Embedding model과 Chat model의 list가 다를 겁니다. 현 시점에선 다음 model을 사용하시면 되겠습니다.
