@@ -24,7 +24,7 @@ aliases:
 	- Output을 내는데 활용할 수 있다. (ex. 글쓰기) 
 
 - [[다상과 다작이 제텔카스텐인 이유]]
-- [[Zettelkasten은 AI시대에서 유용해질 것이다]]
+- [[0. Slip-box/Zettelkasten은 AI시대에서 유용해질 것이다]]
 
 
 

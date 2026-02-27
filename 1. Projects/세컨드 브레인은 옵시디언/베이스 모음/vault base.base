@@ -1,0 +1,27 @@
+filters:
+  and:
+    - file.ext == "md"
+views:
+  - type: table
+    name: 최근 생성 및 수정
+    order:
+      - file.name
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+    limit: 15
+  - type: cards
+    name: Books
+    filters:
+      and:
+        - file.inFolder("Books")
+    order:
+      - file.name
+      - 출판사
+      - author
+      - total_page
+    cardSize: 200
+    image: note.cover_url
+    imageFit: contain
+    imageAspectRatio: 1

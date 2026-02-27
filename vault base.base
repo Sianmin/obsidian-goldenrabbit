@@ -1,0 +1,28 @@
+filters:
+  and:
+    - file.ext == "md"
+views:
+  - type: table
+    name: Table
+    order:
+      - file.name
+      - file.mtime
+    sort:
+      - property: file.mtime
+        direction: DESC
+      - property: file.name
+        direction: DESC
+    limit: 15
+  - type: cards
+    name: Books
+    filters:
+      and:
+        - file.inFolder("Books")
+    order:
+      - file.name
+      - 출판사
+      - author
+      - total_page
+      - cover_url
+    image: note.cover_url
+    imageFit: contain

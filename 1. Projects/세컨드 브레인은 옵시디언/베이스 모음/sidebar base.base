@@ -1,0 +1,28 @@
+formulas:
+  "": ""
+  link direction: |2-
+       if(
+          file.hasLink(this.file) && this.file.links.contains(file),
+          "🔺🔻",
+         if(file.hasLink(this.file), "🔺", if(this.file.links.contains(file), "🔻", "")
+          )
+        )
+properties:
+  file.backlinks:
+    displayName: file backlinks
+views:
+  - type: list
+    name: links
+    filters:
+      and:
+        - '!formula["link direction"].isEmpty()'
+    groupBy:
+      property: formula.link direction
+      direction: ASC
+    order:
+      - file.name
+      - formula.link direction
+    sort:
+      - property: file.mtime
+        direction: DESC
+    separator: " "
