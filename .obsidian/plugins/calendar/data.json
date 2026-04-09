@@ -1,5 +1,5 @@
 {
-  "shouldConfirmBeforeCreate": true,
+  "shouldConfirmBeforeCreate": false,
   "weekStart": "locale",
   "wordsPerDot": 250,
   "showWeeklyNote": true,
