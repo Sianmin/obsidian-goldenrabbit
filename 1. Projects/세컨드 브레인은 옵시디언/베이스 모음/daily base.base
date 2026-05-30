@@ -3,8 +3,8 @@ views:
     name: Daily
     filters:
       and:
-        - file.ctime.date() >= date(this.file.name) - duration("3d")
-        - file.ctime.date() <= date(this.file.name) + duration("3d")
+        - date(file.name)  >= date(this.file.name) - duration("3d")
+        - date(file.name)  <= date(this.file.name) + duration("3d")
         - file != this.file
     order:
       - file.name

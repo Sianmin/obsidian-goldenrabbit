@@ -2,7 +2,8 @@
   "accentColor": "",
   "cssTheme": "Things",
   "enabledCssSnippets": [
-    "numbered-headers"
+    "numbered-headers",
+    "heading"
   ],
   "theme": "moonstone"
 }
