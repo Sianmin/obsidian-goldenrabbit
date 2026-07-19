@@ -1,31 +1,20 @@
 {
+  "data_version": 2,
   "command_timeout": 5,
   "templates_folder": "3. Resource/templates",
-  "templates_pairs": [
-    [
-      "",
-      ""
-    ]
-  ],
-  "trigger_on_file_creation": false,
+  "templates_pairs": [],
+  "trigger_on_file_creation_mode": "folder",
   "auto_jump_to_cursor": false,
-  "enable_system_commands": false,
+  "jump_to_cursor_after_file_name": false,
   "shell_path": "",
   "user_scripts_folder": "",
-  "enable_folder_templates": true,
-  "folder_templates": [
-    {
-      "folder": "",
-      "template": ""
-    }
-  ],
+  "folder_templates": [],
+  "file_templates": [],
   "syntax_highlighting": true,
   "syntax_highlighting_mobile": false,
-  "enabled_templates_hotkeys": [
-    ""
-  ],
-  "startup_templates": [
-    ""
-  ],
+  "enabled_templates_hotkeys": [],
+  "startup_templates": [],
+  "intellisense_render": "1",
+  "ignore_folders_on_creation": [],
   "enable_ribbon_icon": true
 }
