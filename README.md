@@ -22,4 +22,8 @@
 > 
 > https://github.com/r-u-s-h-i-k-e-s-h/Obsidian-CSS-Snippets/tree/Collection
 
-## 개정판에서는 초판과 달리 Smart connections 내용이 빠졌습니다.
+## 초판과 달라진 점
+- 개정판에서는 Smart connections 내용이 빠졌습니다.
+
+## 책 내용 수정 사항
+- p44. 1분 꿀팁에서 기존 [Settings - Files and links - Detect all file extensions (활성화)] 이 [Settings - Files and links - Links - Show all file types (활성화)] 로 변경되었습니다. (거북한거북님 감사합니다.)
