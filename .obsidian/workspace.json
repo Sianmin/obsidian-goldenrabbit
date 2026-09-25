@@ -41,7 +41,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical",
-                "autoReveal": false
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -94,8 +96,8 @@
             "state": {
               "type": "calendar",
               "state": {},
-              "icon": "calendar-with-checkmark",
-              "title": "Calendar"
+              "icon": "lucide-ghost",
+              "title": "calendar"
             }
           },
           {
@@ -206,11 +208,11 @@
       "publish:Publish changes...": false,
       "bases:Create new base": false,
       "obsidian-excalidraw-plugin:New drawing": false,
+      "periodic-notes:Open today": false,
       "kr-book-info-plugin:Add Book Info": false,
-      "templater-obsidian:Templater": false,
-      "periodic-notes:Open today": false
+      "templater-obsidian:Templater": false
     }
   },
-  "active": "ab44c53d62d840dc",
+  "active": "81e25b67d4dfd28e",
   "lastOpenFiles": []
 }
