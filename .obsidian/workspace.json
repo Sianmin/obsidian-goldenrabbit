@@ -208,9 +208,9 @@
       "publish:Publish changes...": false,
       "bases:Create new base": false,
       "obsidian-excalidraw-plugin:New drawing": false,
-      "periodic-notes:Open today": false,
       "kr-book-info-plugin:Add Book Info": false,
-      "templater-obsidian:Templater": false
+      "templater-obsidian:Templater": false,
+      "periodic-notes:Open today": false
     }
   },
   "active": "81e25b67d4dfd28e",

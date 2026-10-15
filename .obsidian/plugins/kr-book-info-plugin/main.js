@@ -44,193 +44,387 @@ var __async = (__this, __arguments, generator) => {
 // main.ts
 var main_exports = {};
 __export(main_exports, {
+  KrBookInfoSettingTab: () => KrBookInfoSettingTab,
   default: () => KrBookInfo
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian3 = require("obsidian");
+var import_obsidian4 = require("obsidian");
+
+// src/yes24Request.ts
+var import_obsidian = require("obsidian");
+function requestText(url) {
+  return __async(this, null, function* () {
+    let timer;
+    try {
+      const response = yield Promise.race([
+        (0, import_obsidian.requestUrl)({ url, throw: false }),
+        new Promise((_, reject) => {
+          timer = setTimeout(() => reject(new Error("YES24 \uC751\uB2F5 \uC2DC\uAC04\uC774 \uCD08\uACFC\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.")), 15e3);
+        })
+      ]);
+      if (response.status !== 200) throw new Error(`YES24 \uC694\uCCAD\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4 (HTTP ${response.status}).`);
+      return response.text;
+    } finally {
+      clearTimeout(timer);
+    }
+  });
+}
 
 // src/getBookInfo.ts
-var import_obsidian = require("obsidian");
-var titlePipeline = (title) => {
-  return title.replace(/\(.*\)/gi, "").replace(/\[.*\]/gi, "").replace(":", "\uFF1A").replace("?", "\uFF1F").trim();
+var object = (value) => !!value && typeof value === "object" && !Array.isArray(value);
+var str = (value) => typeof value === "string" ? value.trim() : "";
+var text = (html, selector) => {
+  var _a, _b;
+  return ((_b = (_a = html.querySelector(selector)) == null ? void 0 : _a.textContent) == null ? void 0 : _b.replace(/\s+/g, " ").trim()) || "";
 };
-var getBookInfoResult = (_0) => __async(null, [_0], function* ({
-  bookUrl,
-  defaultTag,
-  status,
-  myRate,
-  bookNote,
-  toggleTitle,
-  toggleIntroduction,
-  toggleIndex
-}) {
-  var _a, _b, _c, _d, _e;
-  bookUrl = encodeURI(bookUrl);
-  try {
-    const response = yield (0, import_obsidian.requestUrl)({
-      url: `http://www.yes24.com` + bookUrl
-    });
-    const parser = new DOMParser();
-    const html = parser.parseFromString(response.text, "text/html");
-    const tags = [defaultTag && defaultTag];
-    html.querySelectorAll(
-      "#infoset_goodsCate > div.infoSetCont_wrap > dl:nth-child(1) > dd > ul > li > a"
-    ).forEach((value) => {
-      tags.push(value.getText().replace(/(\s*)/g, ""));
-    });
-    const tag = [...new Set(tags)];
-    const mainTitle = html.querySelector(
-      "#yDetailTopWrap > div.topColRgt > div.gd_infoTop > div > h2"
-    ).getText();
-    const subTitle = (_a = html.querySelector(
-      "#yDetailTopWrap > div.topColRgt > div.gd_infoTop > div > h3"
-    )) == null ? void 0 : _a.getText();
-    const title = subTitle ? `${titlePipeline(mainTitle)}\uFF1A${titlePipeline(subTitle)}` : titlePipeline(mainTitle);
-    const authors = [];
-    html.querySelectorAll(
-      "#yDetailTopWrap > div.topColRgt > div.gd_infoTop > span.gd_pubArea > span.gd_auth > a"
-    ).forEach((value) => {
-      authors.push(value.getText().trim());
-    });
-    html.querySelectorAll(
-      "#yDetailTopWrap > div.topColRgt > div.gd_infoTop > span.gd_pubArea > span.gd_auth > span > span.moreAuthLi > span > ul > li > a"
-    ).forEach((value) => {
-      authors.push(value.getText().trim());
-    });
-    const author = [...new Set(authors)];
-    const page = +html.querySelector(
-      "#infoset_specific > div.infoSetCont_wrap > div > table > tbody > tr:nth-child(2) > td"
-    ).getText().split(" ")[0].slice(0, -1) || 0;
-    const publishDate = html.querySelector(
-      "#yDetailTopWrap > div.topColRgt > div.gd_infoTop > span.gd_pubArea > span.gd_date"
-    ).getText().split(" ").map((v) => v.slice(0, -1)).join("-");
-    const coverUrl = ((_b = html.querySelector("#yDetailTopWrap > div.topColLft > div").querySelector(
-      "#yDetailTopWrap > div.topColLft > div > div.gd_3dGrp > div > span.gd_img > em > img"
-    )) == null ? void 0 : _b.getAttribute("src")) || ((_c = html.querySelector(
-      "#yDetailTopWrap > div.topColLft > div > span > em > img"
-    )) == null ? void 0 : _c.getAttribute("src")) || "";
-    const introduction = (_d = html.querySelector(
-      "#infoset_introduce > div.infoSetCont_wrap > div.infoWrap_txt > div"
-    )) == null ? void 0 : _d.getText().replace(/(<br>|<br\/>|<br \/>)/g, "\r\n").replace(/(<b>|<B>|<\/b>|<\/B>|\[|\]|\*|\#)/g, "").split("\n").map((line) => line.trim() + "\n").join("");
-    const index = (_e = html.querySelector(
-      "#infoset_toc > div.infoSetCont_wrap > div.infoWrap_txt"
-    )) == null ? void 0 : _e.getText().replace(/(<br>|<br\/>|<br \/>)/g, "\r\n").replace(/(<b>|<B>|<\/b>|<\/B>|\[|\]|\*|\#)/g, "").split("\n").map((line) => line.trim() + "\n").join("");
-    const frontmatter = {
-      created: `${new Date(+/* @__PURE__ */ new Date() + 3240 * 1e4).toISOString().split("T")[0] + " " + (/* @__PURE__ */ new Date()).toTimeString().split(" ")[0].slice(0, 5)}`,
-      tag: `${tag.join(" ")}`,
-      title: `${title}`,
-      author: `${author.join(", ")}`,
-      category: `${tag[1]}`,
-      total_page: page,
-      publish_date: `${publishDate}`,
-      cover_url: `${coverUrl}`,
-      status: `${status}`,
-      start_read_date: `${new Date(+/* @__PURE__ */ new Date() + 3240 * 1e4).toISOString().split("T")[0]}`,
-      finish_read_date: `${new Date(+/* @__PURE__ */ new Date() + 3240 * 1e4).toISOString().split("T")[0]}`,
-      my_rate: +myRate,
-      book_note: `${bookNote}`
-    };
-    const main = `---
-${(0, import_obsidian.stringifyYaml)(frontmatter)}---
-${toggleTitle ? `
-# ${title}` : ""}${toggleIntroduction ? `
-
-## \uCC45\uC18C\uAC1C
-${introduction}` : ""}${toggleIndex ? `
-
-## \uBAA9\uCC28
-${index}` : ""}`;
-    return {
-      ok: true,
-      book: {
-        title: title.replace("\uFF1A", " ").replace("\uFF1F", "").replace("/", "\uFF0F").replace(/\s{2,}/gi, " "),
-        main
+function structuredBook(html, id) {
+  for (const script of Array.from(html.querySelectorAll('script[type="application/ld+json"]'))) {
+    try {
+      const parsed = JSON.parse(script.textContent || "");
+      const roots = Array.isArray(parsed) ? parsed : [parsed];
+      const nodes = roots.flatMap((node) => object(node) && Array.isArray(node["@graph"]) ? [node, ...node["@graph"]] : [node]);
+      for (const node of nodes) {
+        if (!object(node)) continue;
+        const types = Array.isArray(node["@type"]) ? node["@type"] : [node["@type"]];
+        if (types.includes("Book") && (!node.sku || String(node.sku) === id)) return node;
       }
-    };
-  } catch (err) {
-    return {
-      ok: false
-    };
+    } catch (e) {
+    }
   }
-});
-
-// src/searchUrl.ts
-var import_obsidian2 = require("obsidian");
-var searchBookUrl = (bookName) => __async(null, null, function* () {
-  bookName = encodeURI(bookName);
-  try {
-    const response = yield (0, import_obsidian2.requestUrl)({
-      url: "http://www.yes24.com/Product/searchapi/bulletsearch/goods?query=" + bookName
-    });
-    const data = JSON.parse(response.text);
-    const lstSearchKeywordResult = data == null ? void 0 : data.lstSearchKeywordResult;
-    const bookInfo = lstSearchKeywordResult[0].GOODDS_INDEXES.GOODS_NO;
-    const bookUrl = `/Product/Goods/${bookInfo}`;
-    return { ok: true, url: bookUrl };
-  } catch (err) {
-    console.log(err);
-    return { ok: false };
-  }
-});
-var totalSearchBookUrl = (bookName) => __async(null, null, function* () {
-  bookName = encodeURI(bookName);
-  try {
-    const response = yield (0, import_obsidian2.requestUrl)({
-      url: "http://www.yes24.com/Product/Search?domain=ALL&query=" + bookName
-    });
-    const parser = new DOMParser();
-    const html = parser.parseFromString(response.text, "text/html");
-    const bookUrl = html.querySelector(
-      "#yesSchList > li:nth-child(1) > div > div.item_info > div.info_row.info_name > a.gd_name"
-    ).getAttribute("href");
-    return { ok: true, url: bookUrl };
-  } catch (err) {
-    console.log(err);
-    return { ok: false };
-  }
-});
-var getBookUrl = (bookName) => __async(null, null, function* () {
-  const searchBookResult = yield searchBookUrl(bookName);
-  if (searchBookResult.ok) {
-    return searchBookResult;
-  }
-  const searchTotalBookResult = yield totalSearchBookUrl(bookName);
-  if (searchTotalBookResult.ok) {
-    return searchTotalBookResult;
-  }
-  return { ok: false };
-});
+  return {};
+}
+function sectionText(html, selector) {
+  var _a;
+  const section = html.querySelector(selector);
+  if (!section) return "";
+  const source = section.querySelector("textarea.txtContentText");
+  const raw = source ? source.value : ((_a = section.querySelector(".infoWrap_txt")) == null ? void 0 : _a.innerHTML) || "";
+  const doc = new DOMParser().parseFromString(raw, "text/html");
+  doc.querySelectorAll("script, style, textarea").forEach((node) => node.remove());
+  doc.querySelectorAll("br").forEach((node) => node.replaceWith("\n"));
+  doc.querySelectorAll("p, div, li").forEach((node) => node.append("\n"));
+  return (doc.body.textContent || "").split("\n").map((line) => line.trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+function parseBookInfo(source, id) {
+  var _a, _b;
+  const html = new DOMParser().parseFromString(source, "text/html");
+  const data = structuredBook(html, id);
+  const title = str(data.name) || text(html, "#yDetailTopWrap .gd_infoTop h2");
+  if (!title) throw new Error("YES24 \uB3C4\uC11C \uC0C1\uC138\uC815\uBCF4\uB97C \uC77D\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.");
+  const rows = /* @__PURE__ */ new Map();
+  html.querySelectorAll("#infoset_specific tr").forEach((row) => {
+    var _a2, _b2, _c, _d;
+    rows.set(((_b2 = (_a2 = row.querySelector("th")) == null ? void 0 : _a2.textContent) == null ? void 0 : _b2.trim()) || "", ((_d = (_c = row.querySelector("td")) == null ? void 0 : _c.textContent) == null ? void 0 : _d.trim()) || "");
+  });
+  const authors = (Array.isArray(data.author) ? data.author : [data.author]).map((value) => object(value) ? str(value.name) : str(value)).filter(Boolean);
+  if (!authors.length) html.querySelectorAll("#yDetailTopWrap .gd_auth a").forEach((node) => {
+    var _a2;
+    const name = (_a2 = node.textContent) == null ? void 0 : _a2.trim();
+    if (name) authors.push(name);
+  });
+  const pageRow = ((_a = Array.from(rows).find(([key]) => key.includes("\uCABD\uC218"))) == null ? void 0 : _a[1]) || "";
+  const pageMatch = pageRow.match(/([\d,]+)\s*쪽/);
+  const date = text(html, "#yDetailTopWrap .gd_date").match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+  const image = Array.isArray(data.image) ? data.image[0] : data.image;
+  const cover = str(object(image) ? image.url || image.contentUrl : image) || ((_b = html.querySelector("#yDetailTopWrap .gd_img img")) == null ? void 0 : _b.getAttribute("src")) || "";
+  const categories = (Array.isArray(data.genre) ? data.genre : [data.genre]).map(str).filter(Boolean);
+  if (!categories.length) html.querySelectorAll("#infoset_goodsCate dl:first-child li a").forEach((node) => {
+    var _a2;
+    const value = (_a2 = node.textContent) == null ? void 0 : _a2.trim();
+    if (value) categories.push(value);
+  });
+  return {
+    title,
+    authors: [...new Set(authors)],
+    publisher: object(data.publisher) ? str(data.publisher.name) : text(html, "#yDetailTopWrap .gd_pub"),
+    isbn: str(data.isbn) || rows.get("ISBN13") || "",
+    pages: typeof data.numberOfPages === "number" && Number.isFinite(data.numberOfPages) ? data.numberOfPages : pageMatch ? Number(pageMatch[1].replace(/,/g, "")) : 0,
+    publishDate: str(data.datePublished) || (date ? `${date[1]}-${date[2].padStart(2, "0")}-${date[3].padStart(2, "0")}` : ""),
+    cover: /^https?:\/\//i.test(cover) ? cover.replace(/^http:/i, "https:") : "",
+    categories: [...new Set(categories)],
+    introduction: sectionText(html, "#infoset_introduce"),
+    contents: sectionText(html, "#infoset_toc"),
+    url: `https://www.yes24.com/Product/Goods/${id}`
+  };
+}
+function getBookInfo(id) {
+  return __async(this, null, function* () {
+    if (!/^\d+$/.test(id)) throw new Error("\uC798\uBABB\uB41C YES24 \uB3C4\uC11C \uBC88\uD638\uC785\uB2C8\uB2E4.");
+    return parseBookInfo(yield requestText(`https://www.yes24.com/Product/Goods/${id}`), id);
+  });
+}
 
 // src/getBook.ts
-var getBook = (_0) => __async(null, [_0], function* ({
-  bookname,
-  defaultTag,
-  status,
-  myRate,
-  bookNote,
-  toggleTitle,
-  toggleIntroduction,
-  toggleIndex
-}) {
-  const bookUrlResult = yield getBookUrl(bookname);
-  if (!bookUrlResult.ok) {
-    return { ok: false, error: `${bookname} url not found` };
-  }
-  const bookInfoResult = yield getBookInfoResult({
-    bookUrl: bookUrlResult.url,
-    defaultTag,
-    status,
-    myRate,
-    bookNote,
-    toggleTitle,
-    toggleIntroduction,
-    toggleIndex
+function getBook(id, settings) {
+  return __async(this, null, function* () {
+    const book = yield getBookInfo(id);
+    const now = /* @__PURE__ */ new Date();
+    const date = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"), String(now.getDate()).padStart(2, "0")].join("-");
+    const parts = [];
+    if (settings.toggleTitle) parts.push(`# ${book.title}`);
+    if (settings.toggleIntroduction && book.introduction) parts.push(`## \uCC45\uC18C\uAC1C
+${book.introduction}`);
+    if (settings.toggleIndex && book.contents) parts.push(`## \uBAA9\uCC28
+${book.contents}`);
+    return {
+      title: book.title,
+      metadata: {
+        title: book.title,
+        author: book.authors.join(", "),
+        publisher: book.publisher,
+        isbn: book.isbn,
+        total_page: book.pages,
+        publish_date: book.publishDate,
+        cover_url: book.cover,
+        category: book.categories[0] || "",
+        yes24_url: book.url
+      },
+      defaults: {
+        created: `${date} ${now.toTimeString().slice(0, 5)}`,
+        tag: [settings.defaultTag, ...book.categories.map((value) => value.replace(/\s/g, ""))].filter(Boolean).join(" "),
+        status: settings.statusSetting,
+        my_rate: Number(settings.myRateSetting) || 0,
+        book_note: settings.bookNoteSetting,
+        start_read_date: date,
+        finish_read_date: date
+      },
+      body: parts.join("\n\n")
+    };
   });
-  if (!bookInfoResult.ok) {
-    return { ok: false, error: "Get book info error occured" };
+}
+
+// src/BookSearchModal.ts
+var import_obsidian2 = require("obsidian");
+
+// src/searchUrl.ts
+var BOOK_DOMAINS = {
+  BOOK: "\uAD6D\uB0B4\uB3C4\uC11C",
+  FOREIGN: "\uC678\uAD6D\uB3C4\uC11C",
+  EBOOK: "\uC804\uC790\uCC45"
+};
+var PAGE_SIZE = 24;
+var text2 = (node, selector) => {
+  var _a, _b;
+  return ((_b = (_a = node.querySelector(selector)) == null ? void 0 : _a.textContent) == null ? void 0 : _b.replace(/\s+/g, " ").trim()) || "";
+};
+function parseSearchResponse(data, page, domain) {
+  var _a, _b;
+  if (!data || typeof data.listHtml !== "string") {
+    throw new Error("YES24 \uAC80\uC0C9 \uC751\uB2F5 \uD615\uC2DD\uC774 \uBCC0\uACBD\uB418\uC5C8\uC2B5\uB2C8\uB2E4.");
   }
-  return { ok: true, book: bookInfoResult.book };
-});
+  const html = new DOMParser().parseFromString(data.listHtml, "text/html");
+  const count = (_b = (_a = html.querySelector(".sGoodsSecTit")) == null ? void 0 : _a.textContent) == null ? void 0 : _b.match(/\(([\d,]+)\)/);
+  if (!count) throw new Error("YES24 \uAC80\uC0C9 \uACB0\uACFC \uC218\uB97C \uC77D\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.");
+  const total = Number(count[1].replace(/,/g, ""));
+  const books = [];
+  const seen = /* @__PURE__ */ new Set();
+  html.querySelectorAll("#yesSchList > li").forEach((row) => {
+    var _a2;
+    const href = ((_a2 = row.querySelector("a.gd_name")) == null ? void 0 : _a2.getAttribute("href")) || "";
+    const match = href.match(/^\/product\/goods\/(\d+)$/i);
+    const title = text2(row, "a.gd_name");
+    if (!match || !title || seen.has(match[1])) return;
+    seen.add(match[1]);
+    row.querySelectorAll(".moreAuthArea").forEach((node) => node.remove());
+    const edition = Array.from(row.querySelectorAll(".gd_feature .feature")).map((node) => {
+      var _a3;
+      return (_a3 = node.textContent) == null ? void 0 : _a3.trim();
+    }).filter(Boolean).join(" \xB7 ");
+    books.push({
+      id: match[1],
+      url: `/Product/Goods/${match[1]}`,
+      title,
+      author: text2(row, ".info_auth"),
+      publisher: text2(row, ".info_pub"),
+      date: text2(row, ".info_date"),
+      kind: BOOK_DOMAINS[domain],
+      edition: edition || text2(row, ".gd_feature").replace(/^\[\s*|\s*\]$/g, "").trim()
+    });
+  });
+  if (total > (page - 1) * PAGE_SIZE && books.length === 0) {
+    throw new Error("YES24 \uB3C4\uC11C \uBAA9\uB85D\uC744 \uC77D\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.");
+  }
+  return { books, total, page, hasMore: page * PAGE_SIZE < total };
+}
+function searchBooks(query, page = 1, domain = "BOOK") {
+  return __async(this, null, function* () {
+    query = query.trim();
+    if (!query) return { books: [], total: 0, page: 1, hasMore: false };
+    if (!Number.isInteger(page) || page < 1 || !Object.prototype.hasOwnProperty.call(BOOK_DOMAINS, domain)) throw new Error("\uC798\uBABB\uB41C \uAC80\uC0C9 \uC870\uAC74\uC785\uB2C8\uB2E4.");
+    const params = new URLSearchParams({
+      query,
+      domain,
+      page: String(page),
+      size: String(PAGE_SIZE),
+      order: "RELATION",
+      isSchTotal: "false",
+      isQueryProcessed: "false"
+    });
+    const response = yield requestText(`https://www.yes24.com/product/search/SearchContentsJson?${params}`);
+    let data;
+    try {
+      data = JSON.parse(response);
+    } catch (e) {
+      throw new Error("YES24 \uAC80\uC0C9 \uC751\uB2F5\uC744 \uC77D\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4. \uC7A0\uC2DC \uD6C4 \uB2E4\uC2DC \uAC80\uC0C9\uD574 \uC8FC\uC138\uC694.");
+    }
+    return parseSearchResponse(data, page, domain);
+  });
+}
+
+// src/BookSearchModal.ts
+var BookSearchModal = class extends import_obsidian2.Modal {
+  constructor(app, initialQuery) {
+    super(app);
+    this.initialQuery = initialQuery;
+    this.settled = false;
+    this.generation = 0;
+    this.page = 1;
+    this.searchedQuery = "";
+    this.searchedDomain = "BOOK";
+  }
+  choose() {
+    return new Promise((resolve) => {
+      this.resolve = resolve;
+      this.open();
+    });
+  }
+  onOpen() {
+    this.contentEl.addClass("kr-book-search");
+    this.contentEl.createEl("h2", { text: "\uB3C4\uC11C \uC120\uD0DD" });
+    this.contentEl.createEl("p", { text: "\uC81C\uBAA9\xB7\uC800\uC790\xB7\uCD9C\uD310\uC0AC\uC640 \uD310\uBCF8\uC744 \uD655\uC778\uD55C \uB4A4 \uAC00\uC838\uC62C \uCC45\uC744 \uC120\uD0DD\uD558\uC138\uC694.", cls: "kr-book-hint" });
+    const form = this.contentEl.createEl("form", { cls: "kr-book-search-form" });
+    this.query = form.createEl("input", { type: "search", value: this.initialQuery, attr: { "aria-label": "\uCC45 \uC81C\uBAA9, \uC800\uC790 \uB610\uB294 ISBN", placeholder: "\uCC45 \uC81C\uBAA9, \uC800\uC790 \uB610\uB294 ISBN" } });
+    this.domain = form.createEl("select", { attr: { "aria-label": "\uB3C4\uC11C \uC885\uB958" } });
+    Object.keys(BOOK_DOMAINS).forEach((key) => this.domain.createEl("option", { value: key, text: BOOK_DOMAINS[key] }));
+    form.createEl("button", { text: "\uAC80\uC0C9", type: "submit", cls: "mod-cta" });
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      void this.search(1);
+    });
+    this.domain.addEventListener("change", () => {
+      void this.search(1);
+    });
+    this.query.addEventListener("input", () => {
+      this.generation++;
+      this.results.empty();
+      this.previous.disabled = this.next.disabled = true;
+      this.status.setText("Enter \uB610\uB294 \uAC80\uC0C9 \uBC84\uD2BC\uC744 \uB20C\uB7EC \uAC80\uC0C9\uD558\uC138\uC694.");
+    });
+    this.status = this.contentEl.createEl("p", { attr: { role: "status", "aria-live": "polite" } });
+    this.results = this.contentEl.createDiv({ cls: "kr-book-results" });
+    const footer = this.contentEl.createDiv({ cls: "kr-book-pagination" });
+    this.previous = footer.createEl("button", { text: "\uC774\uC804", type: "button" });
+    this.next = footer.createEl("button", { text: "\uB2E4\uC74C", type: "button" });
+    this.previous.addEventListener("click", () => {
+      void this.search(this.page - 1);
+    });
+    this.next.addEventListener("click", () => {
+      void this.search(this.page + 1);
+    });
+    footer.createEl("button", { text: "\uCDE8\uC18C", type: "button" }).addEventListener("click", () => this.close());
+    this.query.focus();
+    this.query.select();
+    void this.search(1);
+  }
+  search(page) {
+    return __async(this, null, function* () {
+      const generation = ++this.generation;
+      const query = page === 1 ? this.query.value.trim() : this.searchedQuery;
+      const domain = page === 1 ? this.domain.value : this.searchedDomain;
+      this.results.empty();
+      this.previous.disabled = this.next.disabled = true;
+      if (!query) {
+        this.status.setText("\uAC80\uC0C9\uD560 \uCC45 \uC81C\uBAA9, \uC800\uC790 \uB610\uB294 ISBN\uC744 \uC785\uB825\uD558\uC138\uC694.");
+        return;
+      }
+      this.status.setText("YES24\uC5D0\uC11C \uAC80\uC0C9 \uC911\u2026");
+      try {
+        const result = yield searchBooks(query, page, domain);
+        if (generation !== this.generation || this.settled) return;
+        this.page = page;
+        this.searchedQuery = query;
+        this.searchedDomain = domain;
+        this.status.setText(result.books.length ? `${result.total.toLocaleString()}\uAC1C \uACB0\uACFC \xB7 ${page}\uD398\uC774\uC9C0` : "\uAC80\uC0C9 \uACB0\uACFC\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4. \uAC80\uC0C9\uC5B4\uB098 \uB3C4\uC11C \uC885\uB958\uB97C \uBC14\uAFD4 \uBCF4\uC138\uC694.");
+        for (const book of result.books) {
+          const button = this.results.createEl("button", { type: "button", cls: "kr-book-result" });
+          button.createEl("span", { text: book.title, cls: "kr-book-result-title" });
+          button.createEl("span", { text: [book.author, book.publisher, book.date].filter(Boolean).join(" \xB7 "), cls: "kr-book-result-meta" });
+          button.createEl("span", { text: [book.kind, book.edition].filter(Boolean).join(" \xB7 "), cls: "kr-book-result-meta" });
+          button.addEventListener("click", () => {
+            if (this.settled) return;
+            this.settled = true;
+            this.resolve(book);
+            this.close();
+          });
+        }
+        this.previous.disabled = page <= 1;
+        this.next.disabled = !result.hasMore;
+        this.results.scrollTop = 0;
+      } catch (error) {
+        if (generation !== this.generation || this.settled) return;
+        this.status.setText(error instanceof Error ? error.message : "YES24 \uAC80\uC0C9\uC5D0 \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");
+      }
+    });
+  }
+  onClose() {
+    var _a;
+    this.generation++;
+    if (!this.settled) {
+      this.settled = true;
+      (_a = this.resolve) == null ? void 0 : _a.call(this, null);
+    }
+    this.contentEl.empty();
+  }
+};
+
+// src/saveBook.ts
+var import_obsidian3 = require("obsidian");
+var START = "<!-- kr-book-info:start -->";
+var END = "<!-- kr-book-info:end -->";
+function updateBookBody(content, body) {
+  const { contentStart } = (0, import_obsidian3.getFrontMatterInfo)(content);
+  const frontmatter = content.slice(0, contentStart);
+  const text3 = content.slice(contentStart);
+  const block = body ? `${START}
+${body}
+${END}` : "";
+  const start = text3.indexOf(START);
+  const end = text3.indexOf(END, start + START.length);
+  if (start >= 0 && end >= start) return frontmatter + text3.slice(0, start) + block + text3.slice(end + END.length);
+  const separator = frontmatter && !frontmatter.endsWith("\n") && block ? "\n" : "";
+  return frontmatter + separator + (block ? `${block}
+
+` : "") + text3;
+}
+function saveBook(app, file, book) {
+  return __async(this, null, function* () {
+    var _a;
+    if (app.vault.getAbstractFileByPath(file.path) !== file) throw new Error("\uC6D0\uB798 \uB178\uD2B8\uAC00 \uC0AD\uC81C\uB418\uAC70\uB098 \uC774\uB3D9\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uC2E4\uD589\uD574 \uC8FC\uC138\uC694.");
+    const originalPath = file.path;
+    const name = book.title.replace(/[\\/:*?"<>|\[\]#^\x00-\x1f]/g, "").replace(/\s+/g, " ").replace(/[. ]+$/g, "").trim();
+    if (!name) throw new Error("\uB3C4\uC11C \uC81C\uBAA9\uC73C\uB85C \uD30C\uC77C \uC774\uB984\uC744 \uB9CC\uB4E4 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4.");
+    const target = (0, import_obsidian3.normalizePath)(`${((_a = file.parent) == null ? void 0 : _a.path) || ""}/${name}.md`);
+    const existing = app.vault.getAbstractFileByPath(target);
+    if (existing && existing !== file) throw new Error("\uAC19\uC740 \uC774\uB984\uC758 \uB178\uD2B8\uAC00 \uC774\uBBF8 \uC788\uC2B5\uB2C8\uB2E4. \uAE30\uC874 \uB178\uD2B8\uB97C \uC5F4\uC5B4 \uC2E4\uD589\uD574 \uC8FC\uC138\uC694.");
+    yield app.fileManager.processFrontMatter(file, (data) => {
+      Object.assign(data, book.metadata);
+      for (const [key, value] of Object.entries(book.defaults)) if (data[key] === void 0) data[key] = value;
+    });
+    try {
+      yield app.vault.process(file, (content) => updateBookBody(content, book.body));
+    } catch (e) {
+      throw new Error("\uB3C4\uC11C \uC18D\uC131\uC740 \uC800\uC7A5\uD588\uC9C0\uB9CC \uBCF8\uBB38\uC744 \uC800\uC7A5\uD558\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uD604\uC7AC \uB178\uD2B8\uB97C \uD655\uC778\uD574 \uC8FC\uC138\uC694.");
+    }
+    if (file.path !== originalPath) throw new Error("\uC800\uC7A5 \uC911 \uB178\uD2B8 \uC704\uCE58\uAC00 \uBCC0\uACBD\uB418\uC5C8\uC2B5\uB2C8\uB2E4. \uD604\uC7AC \uB178\uD2B8\uB97C \uD655\uC778\uD574 \uC8FC\uC138\uC694.");
+    if (file.path !== target) {
+      try {
+        yield app.fileManager.renameFile(file, target);
+      } catch (e) {
+        throw new Error("\uB3C4\uC11C \uC815\uBCF4\uB294 \uC800\uC7A5\uD588\uC9C0\uB9CC \uD30C\uC77C \uC774\uB984\uC744 \uBC14\uAFB8\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uD604\uC7AC \uB178\uD2B8\uB97C \uD655\uC778\uD574 \uC8FC\uC138\uC694.");
+      }
+    }
+  });
+}
 
 // main.ts
 var DEFAULT_SETTINGS = {
@@ -242,51 +436,49 @@ var DEFAULT_SETTINGS = {
   toggleIntroduction: false,
   toggleIndex: false
 };
-var KrBookInfo = class extends import_obsidian3.Plugin {
+var KrBookInfo = class extends import_obsidian4.Plugin {
+  constructor() {
+    super(...arguments);
+    this.busy = false;
+    this.unloaded = false;
+    this.searchModal = null;
+  }
   addBookInfoToActiveFile() {
     return __async(this, null, function* () {
+      if (this.busy || this.unloaded) return;
       const file = this.app.workspace.getActiveFile();
-      if (file.extension !== "md") {
-        new import_obsidian3.Notice("This file is not md file, Please open md file");
-        return;
-      }
       if (!file) {
-        new import_obsidian3.Notice("There's no active file, Please open new file");
+        new import_obsidian4.Notice("\uC5F4\uB9B0 \uB178\uD2B8\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4. Markdown \uB178\uD2B8\uB97C \uC5F4\uC5B4 \uC8FC\uC138\uC694.");
         return;
       }
-      new import_obsidian3.Notice("Loading...");
-      const {
-        ok,
-        book: { title, main },
-        error
-      } = yield getBook({
-        bookname: file.basename,
-        defaultTag: this.settings.defaultTag,
-        status: this.settings.statusSetting,
-        myRate: this.settings.myRateSetting,
-        bookNote: this.settings.bookNoteSetting,
-        toggleTitle: this.settings.toggleTitle,
-        toggleIntroduction: this.settings.toggleIntroduction,
-        toggleIndex: this.settings.toggleIndex
-      });
-      if (!ok) {
-        new import_obsidian3.Notice(error);
+      if (file.extension !== "md") {
+        new import_obsidian4.Notice("Markdown \uB178\uD2B8\uC5D0\uC11C \uC2E4\uD589\uD574 \uC8FC\uC138\uC694.");
         return;
       }
-      const text = yield this.app.vault.read(file);
-      this.app.vault.modify(file, main + "\n\n" + text);
-      const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-+<>@\#$%&\\\=\(\'\"]/gi;
-      const fileName = title.replace(regExp, "");
-      this.app.fileManager.renameFile(
-        this.app.vault.getAbstractFileByPath(file.path),
-        file.parent.path + "/" + fileName + ".md"
-      );
-      new import_obsidian3.Notice(`Success!`);
-      return;
+      this.busy = true;
+      let loading;
+      try {
+        this.searchModal = new BookSearchModal(this.app, file.basename);
+        const selected = yield this.searchModal.choose();
+        this.searchModal = null;
+        if (!selected || this.unloaded) return;
+        loading = new import_obsidian4.Notice("\uB3C4\uC11C \uC815\uBCF4\uB97C \uAC00\uC838\uC624\uB294 \uC911\u2026", 0);
+        const book = yield getBook(selected.id, this.settings);
+        if (this.unloaded) return;
+        yield saveBook(this.app, file, book);
+        if (!this.unloaded) new import_obsidian4.Notice("\uB3C4\uC11C \uC815\uBCF4\uB97C \uC800\uC7A5\uD588\uC2B5\uB2C8\uB2E4.");
+      } catch (error) {
+        console.error("[kr-book-info]", error);
+        new import_obsidian4.Notice(error instanceof Error ? error.message : "\uB3C4\uC11C \uC815\uBCF4\uB97C \uAC00\uC838\uC624\uC9C0 \uBABB\uD588\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uC2DC\uB3C4\uD574 \uC8FC\uC138\uC694.");
+      } finally {
+        loading == null ? void 0 : loading.hide();
+        this.busy = false;
+      }
     });
   }
   onload() {
     return __async(this, null, function* () {
+      this.unloaded = false;
       yield this.loadSettings();
       this.addCommand({
         id: "add-book-info",
@@ -321,9 +513,12 @@ var KrBookInfo = class extends import_obsidian3.Plugin {
     });
   }
   onunload() {
+    var _a;
+    this.unloaded = true;
+    (_a = this.searchModal) == null ? void 0 : _a.close();
   }
 };
-var KrBookInfoSettingTab = class extends import_obsidian3.PluginSettingTab {
+var KrBookInfoSettingTab = class extends import_obsidian4.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -332,43 +527,43 @@ var KrBookInfoSettingTab = class extends import_obsidian3.PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
     containerEl.createEl("h2", { text: "Default Setting" });
-    new import_obsidian3.Setting(containerEl).setName("Tag").setDesc("Set default tag value").addText(
-      (text) => text.setPlaceholder("Enter your default tag").setValue(this.plugin.settings.defaultTag).onChange((value) => __async(this, null, function* () {
+    new import_obsidian4.Setting(containerEl).setName("Tag").setDesc("Set default tag value").addText(
+      (text3) => text3.setPlaceholder("Enter your default tag").setValue(this.plugin.settings.defaultTag).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.defaultTag = value;
         yield this.plugin.saveSettings();
       }))
     );
-    new import_obsidian3.Setting(containerEl).setName("Status").setDesc("Set status default value").addText(
-      (text) => text.setPlaceholder("Enter your status").setValue(this.plugin.settings.statusSetting).onChange((value) => __async(this, null, function* () {
+    new import_obsidian4.Setting(containerEl).setName("Status").setDesc("Set status default value").addText(
+      (text3) => text3.setPlaceholder("Enter your status").setValue(this.plugin.settings.statusSetting).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.statusSetting = value;
         yield this.plugin.saveSettings();
       }))
     );
-    new import_obsidian3.Setting(containerEl).setName("My Rate").setDesc("Set my_rate default value").addText(
-      (text) => text.setPlaceholder("Enter your status").setValue(this.plugin.settings.myRateSetting).onChange((value) => __async(this, null, function* () {
+    new import_obsidian4.Setting(containerEl).setName("My Rate").setDesc("Set my_rate default value").addText(
+      (text3) => text3.setPlaceholder("Enter your status").setValue(this.plugin.settings.myRateSetting).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.myRateSetting = value;
         yield this.plugin.saveSettings();
       }))
     );
-    new import_obsidian3.Setting(containerEl).setName("Book Note").setDesc("Set book_note default value").addText(
-      (text) => text.setPlaceholder("Enter your status").setValue(this.plugin.settings.bookNoteSetting).onChange((value) => __async(this, null, function* () {
+    new import_obsidian4.Setting(containerEl).setName("Book Note").setDesc("Set book_note default value").addText(
+      (text3) => text3.setPlaceholder("Enter your status").setValue(this.plugin.settings.bookNoteSetting).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.bookNoteSetting = value;
         yield this.plugin.saveSettings();
       }))
     );
-    new import_obsidian3.Setting(containerEl).setName("Toggle Title").setDesc("Add title on main text or not").addToggle(
+    new import_obsidian4.Setting(containerEl).setName("Toggle Title").setDesc("Add title on main text or not").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.toggleTitle).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.toggleTitle = value;
         yield this.plugin.saveSettings();
       }))
     );
-    new import_obsidian3.Setting(containerEl).setName("Toggle Introduction").setDesc("Add introduction on main text or not").addToggle(
+    new import_obsidian4.Setting(containerEl).setName("Toggle Introduction").setDesc("Add introduction on main text or not").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.toggleIntroduction).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.toggleIntroduction = value;
         yield this.plugin.saveSettings();
       }))
     );
-    new import_obsidian3.Setting(containerEl).setName("Toggle Index").setDesc("Add index on main text or not").addToggle(
+    new import_obsidian4.Setting(containerEl).setName("Toggle Index").setDesc("Add index on main text or not").addToggle(
       (toggle) => toggle.setValue(this.plugin.settings.toggleIndex).onChange((value) => __async(this, null, function* () {
         this.plugin.settings.toggleIndex = value;
         yield this.plugin.saveSettings();
